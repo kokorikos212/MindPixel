@@ -1,0 +1,9 @@
+[[2. Table of contents]]
+
+Welcome to the official repository of **MindPixel**, an Erasmus+ Training Course that took place in the serene mountains of **Bansko, Bulgaria**, from **July 2nd to 12th, 2026**. This guide is designed to serve as a practical toolkit for future youth workers, trainers, and organizers, capturing the methodologies, activities, and insights developed during our time together.
+
+As digital technologies increasingly shape the daily lives of young people, youth work faces urgent new questions. MindPixel was born out of the need to explore the intersection of **digital safety, data protection, artificial intelligence, and youth mental wellbeing**. Throughout the project, an international team of European youth workers, educators, leaders, and artists came together to examine how online pressure, privacy concerns, and algorithmic influences affect our mental health.
+
+What made MindPixel truly unique was its approach: instead of relying on dry lectures, we tackled these complex digital dilemmas through **creative, arts-based methods**. Art became our primary tool for reflection, emotional expression, and collaboration.
+
+Within this guide, you will find a curated collection of the games, poems, workshops, and reflections utilized during the training course. We invite you to adapt, remix, and implement these resources in your own local contexts to help the next generation navigate modern digital life with a healthy, balanced mind.

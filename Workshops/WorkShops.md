@@ -1,0 +1,5 @@
+The core of our journey wasn't about passive listening; it was about taking the stage. The workshop logs compiled in this hub represent a dedicated space where the distinction between "trainer" and "participant" dissolved entirely.
+
+International teams of youth workers, educators, and artists stepped up to design, pitch, and facilitate their own experimental sessions. Backed by the quiet inspiration of the Pirin mountains, the surrounding forests became open-air laboratories. Here, participants tested new arts-based methodologies, tackled tough digital dilemmas, and pushed the boundaries of traditional non-formal education.
+
+To ensure these sessions weren't just fleeting experiences but real tools for growth, every single exploration was anchored by a dedicated peer feedback loop. After each workshop, the group gathered to celebrate creative breakthroughs, dissect delivery techniques, and offer constructive, practical adjustments. It was a safe sandbox for trial, error, and collective evolution.
