@@ -8,6 +8,12 @@ tags:
   - mindfulness
   - technology
   - art
+type: workshop
+duration: 35
+group_size: 8-30
+materials: feelings wheel, paper, pens or markers, timer
+location: both
+energy: low
 ---
 
 # Two Hands, Two Selves

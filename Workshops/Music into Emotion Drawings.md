@@ -1,5 +1,17 @@
 ---
-tags: [workshop]
+tags:
+  - workshop
+  - music
+  - emotions
+  - art
+  - self-expression
+  - creativity
+type: workshop
+duration: 25
+group_size: 5-25
+materials: blank paper, markers, playlist, speaker
+location: indoor
+energy: low
 part-of: "[[3-in-1 Workshops]]"
 facilitator: "[[Jēkabs]]"
 ---

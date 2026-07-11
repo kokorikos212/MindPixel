@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Search — MindPixel Toolkit</title>
+
+  <!-- shared styles (same as page template) -->
+  <style>
+    :root {
+      --bg: #fafaf8; --surface: #ffffff; --text: #1e1e24;
+      --text-secondary: #5e5e6a; --border: #e4e4e0;
+      --accent: #5b6e8a; --accent-soft: #eef1f5;
+      --tag-bg: #edf0f4; --tag-text: #4a5568;
+      --type-game: #e8f0e4; --type-workshop: #e8eaf4;
+      --type-day-log: #f4ece4; --type-hub: #f0e8f0; --type-page: #e8f0f0;
+      --shadow: 0 1px 3px rgba(0,0,0,.06);
+      --shadow-lg: 0 4px 16px rgba(0,0,0,.08);
+      --radius: 10px;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a20; --surface: #24242c; --text: #e4e4ec;
+        --text-secondary: #a0a0b0; --border: #363640;
+        --accent: #8ea8cc; --accent-soft: #2a303c;
+        --tag-bg: #2c303a; --tag-text: #b0b8c8;
+        --type-game: #1c2818; --type-workshop: #1c1e28;
+        --type-day-log: #282018; --type-hub: #241c28; --type-page: #182228;
+        --shadow: 0 1px 3px rgba(0,0,0,.25);
+        --shadow-lg: 0 4px 16px rgba(0,0,0,.35);
+      }
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 17px; }
+    body {
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg); color: var(--text); line-height: 1.65;
+      min-height: 100vh;
+    }
+
+    /* ---- nav ---- */
+    .topnav {
+      display: flex; align-items: center; gap: .75rem; flex-wrap: wrap;
+      padding: .85rem 1.5rem;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      position: sticky; top: 0; z-index: 10;
+      box-shadow: var(--shadow);
+    }
+    .topnav a {
+      text-decoration: none; color: var(--text-secondary);
+      font-weight: 500; font-size: .9rem; padding: .35rem .65rem;
+      border-radius: 6px; transition: background .15s, color .15s;
+    }
+    .topnav a:hover, .topnav a.active { background: var(--accent-soft); color: var(--accent); }
+    .topnav .brand { font-weight: 700; color: var(--text); margin-right: auto; font-size: 1rem; }
+
+    .container { max-width: 780px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+    /* ---- hero ---- */
+    .search-hero { text-align: center; margin: 1.5rem 0 2rem; }
+    .search-hero h1 { font-size: 1.8rem; font-weight: 700; letter-spacing: -.02em; margin-bottom: .4rem; }
+    .search-hero p { color: var(--text-secondary); font-size: .95rem; }
+
+    /* ---- input ---- */
+    .search-box {
+      position: relative; max-width: 620px; margin: 0 auto;
+    }
+    .search-box input {
+      width: 100%; padding: .85rem 1.1rem; font-size: 1.05rem;
+      border: 2px solid var(--border); border-radius: var(--radius);
+      background: var(--surface); color: var(--text); outline: none;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .search-box input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(91,110,138,.15);
+    }
+    .search-box input::placeholder { color: var(--text-secondary); opacity: .6; }
+    .search-hints {
+      font-size: .78rem; color: var(--text-secondary); margin-top: .5rem; text-align: center;
+    }
+    .search-hints button {
+      background: none; border: 1px solid var(--border); color: var(--text-secondary);
+      padding: .25rem .55rem; border-radius: 99px; cursor: pointer;
+      font-size: .75rem; margin: .2rem .15rem; transition: all .15s;
+    }
+    .search-hints button:hover { background: var(--accent-soft); color: var(--accent); border-color: var(--accent); }
+
+    /* ---- status ---- */
+    .status {
+      text-align: center; padding: 2rem; color: var(--text-secondary); font-size: .9rem;
+    }
+    .status .spinner {
+      display: inline-block; width: 24px; height: 24px;
+      border: 3px solid var(--border); border-top-color: var(--accent);
+      border-radius: 50%; animation: spin .7s linear infinite; margin-bottom: .5rem;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .status.error { color: #c05040; }
+
+    /* ---- results ---- */
+    .result-count { font-size: .82rem; color: var(--text-secondary); margin: .8rem 0 1rem; }
+    .result-card {
+      display: block; text-decoration: none; color: inherit;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 1.1rem 1.2rem; margin-bottom: .75rem;
+      transition: border-color .15s, box-shadow .15s;
+    }
+    .result-card:hover { border-color: var(--accent); box-shadow: var(--shadow-lg); }
+    .result-card h3 {
+      font-size: 1.05rem; font-weight: 650; margin-bottom: .3rem; color: var(--accent);
+    }
+    .result-card .snippet { font-size: .88rem; color: var(--text-secondary); margin-bottom: .55rem; line-height: 1.5; }
+    .result-card .score { font-size: .72rem; color: var(--text-secondary); opacity: .7; }
+    .result-meta {
+      display: flex; flex-wrap: wrap; gap: .3rem; align-items: center; margin-top: .4rem;
+    }
+    .result-meta .pill {
+      display: inline-flex; align-items: center; gap: .25rem;
+      font-size: .72rem; font-weight: 500; padding: .2rem .5rem;
+      border-radius: 99px; background: var(--tag-bg); color: var(--tag-text);
+    }
+    .result-meta .pill.type-game { background: var(--type-game); }
+    .result-meta .pill.type-workshop { background: var(--type-workshop); }
+    .result-meta .pill.type-day-log { background: var(--type-day-log); }
+    .result-meta .pill.type-hub { background: var(--type-hub); }
+    .result-meta .pill.type-page { background: var(--type-page); }
+
+    /* ---- empty ---- */
+    .empty { text-align: center; padding: 2.5rem 1rem; color: var(--text-secondary); }
+    .empty .icon { font-size: 2.5rem; margin-bottom: .5rem; }
+
+    @media (max-width: 600px) {
+      .container { padding: 1rem .8rem 3rem; }
+      .search-hero h1 { font-size: 1.4rem; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="topnav">
+    <a href="index.html" class="brand">🧠 MindPixel</a>
+    <a href="index.html">Home</a>
+    <a href="search.html" class="active">🔍 Search</a>
+    <a href="2.%20Table%20of%20contents.html">Contents</a>
+  </nav>
+
+  <main class="container">
+    <div class="search-hero">
+      <h1>Find the perfect activity</h1>
+      <p>Describe what you need in plain language — the toolkit finds the best match.</p>
+    </div>
+
+    <div class="search-box">
+      <input
+        type="text" id="query"
+        placeholder="e.g. a quick outdoor energizer for 20 people with no materials…"
+        autofocus autocomplete="off"
+      >
+    </div>
+
+    <div class="search-hints">
+      <span>Try:</span>
+      <button data-q="icebreaker for a new group that needs no materials">quick icebreaker</button>
+      <button data-q="outdoor activity about emotions and mindfulness">outdoor emotions</button>
+      <button data-q="workshop about digital privacy and online safety">digital privacy</button>
+      <button data-q="calm creative activity with drawing and art">calm art activity</button>
+      <button data-q="high energy game for large group">high energy game</button>
+    </div>
+
+    <div id="status" class="status">
+      <div class="spinner"></div>
+      <p>Loading search engine…</p>
+    </div>
+
+    <div id="results"></div>
+  </main>
+
+  <script type="module">
+    // ==================================================================
+    //  MindPixel Semantic Search
+    //  Uses Transformers.js (all-MiniLM-L6-v2) for in-browser embeddings
+    // ==================================================================
+
+    import { pipeline, env } from 'https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.2';
+
+    // Allow loading the model from HuggingFace CDN
+    env.allowLocalModels = false;
+
+    // --- state ---
+    let modelPipe = null;
+    let index = null;        // array of { path, title, type, …, embedding }
+    let embeddings = null;   // Float32Array[n_docs * dim] – flat for speed
+
+    const DIM = 384;         // all-MiniLM-L6-v2 embedding size
+
+    // --- DOM ---
+    const statusEl = document.getElementById('status');
+    const resultsEl = document.getElementById('results');
+    const queryInput = document.getElementById('query');
+
+    // --- helpers ---
+
+    function showStatus(html, isError = false) {
+      statusEl.innerHTML = html;
+      statusEl.className = 'status' + (isError ? ' error' : '');
+      statusEl.style.display = 'block';
+      resultsEl.innerHTML = '';
+    }
+
+    function hideStatus() { statusEl.style.display = 'none'; }
+
+    /** Dot product of two normalised vectors → cosine similarity ∈ [-1, 1] */
+    function dot(a, aOffset, b) {
+      let s = 0;
+      for (let i = 0; i < DIM; i++) s += a[aOffset + i] * b[i];
+      return s;
+    }
+
+    // --- init ---
+
+    async function init() {
+      // 1. load the model
+      showStatus('<div class="spinner"></div><p>Loading embedding model (first visit may take a moment)…</p>');
+      try {
+        modelPipe = await pipeline('feature-extraction', 'Xenova/all-MiniLM-L6-v2');
+      } catch (err) {
+        showStatus('<p>⚠️ Could not load the search model.</p><p>Check your internet connection and try again.</p>', true);
+        console.error(err);
+        return;
+      }
+
+      // 2. load the pre-computed index
+      showStatus('<div class="spinner"></div><p>Loading toolkit index…</p>');
+      try {
+        const resp = await fetch('search-index.json');
+        if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+        index = await resp.json();
+      } catch (err) {
+        showStatus('<p>⚠️ Could not load the search index.</p><p>Make sure <code>search-index.json</code> is deployed.</p>', true);
+        console.error(err);
+        return;
+      }
+
+      // 3. flatten embeddings into one big Float32Array (way faster than
+      //    looping over JS arrays of arrays)
+      const n = index.length;
+      embeddings = new Float32Array(n * DIM);
+      for (let i = 0; i < n; i++) {
+        const vec = index[i].embedding;
+        const offset = i * DIM;
+        for (let j = 0; j < DIM; j++) embeddings[offset + j] = vec[j];
+      }
+
+      hideStatus();
+      console.log(`Search ready: ${n} documents indexed.`);
+
+      // check for a pre-filled query (from tag click or URL param)
+      const params = new URLSearchParams(window.location.search);
+      const q = params.get('q');
+      if (q) {
+        queryInput.value = q;
+        doSearch(q);
+      }
+    }
+
+    // --- search ---
+
+    async function doSearch(rawQuery) {
+      const q = rawQuery.trim();
+      if (!q) { resultsEl.innerHTML = ''; return; }
+      if (!modelPipe || !index) return;
+
+      showStatus('<div class="spinner"></div><p>Searching…</p>');
+
+      let queryVec;
+      try {
+        const out = await modelPipe(q, { pooling: 'mean', normalize: true });
+        queryVec = out.data;  // Float32Array of length DIM
+      } catch (err) {
+        showStatus('<p>⚠️ Search failed. Please try again.</p>', true);
+        console.error(err);
+        return;
+      }
+
+      // compute scores
+      const n = index.length;
+      const scored = [];
+      for (let i = 0; i < n; i++) {
+        const score = dot(embeddings, i * DIM, queryVec);
+        scored.push({ ...index[i], score });
+      }
+
+      // sort descending
+      scored.sort((a, b) => b.score - a.score);
+
+      // take top 12, filter out very low relevance
+      const top = scored.filter(r => r.score > 0.2).slice(0, 12);
+
+      hideStatus();
+      renderResults(top, scored.length);
+    }
+
+    // --- render ---
+
+    function renderResults(results, total) {
+      if (!results.length) {
+        resultsEl.innerHTML = `<div class="empty">
+          <div class="icon">🔍</div>
+          <p>No matching activities found.</p>
+          <p style="font-size:.85rem">Try different words or browse the <a href="2.%20Table%20of%20contents.html">Table of Contents</a>.</p>
+        </div>`;
+        return;
+      }
+
+      const typeLabels = {
+        game: '🎲 Game', workshop: '🎨 Workshop',
+        'day-log': '📅 Day Log', hub: '📂 Hub', page: '📄 Page'
+      };
+
+      const html = results.map(r => {
+        const typeLabel = typeLabels[r.type] || r.type;
+        const href = r.path.replace(/\.md$/, '.html');
+        const pct = Math.round(r.score * 100);
+
+        const metaPills = [];
+        if (r.type) metaPills.push(`<span class="pill type-${r.type}">${typeLabel}</span>`);
+        if (r.duration) metaPills.push(`<span class="pill">⏱ ${r.duration} min</span>`);
+        if (r.group_size) metaPills.push(`<span class="pill">👥 ${r.group_size}</span>`);
+        if (r.materials) metaPills.push(`<span class="pill">📦 ${r.materials}</span>`);
+        if (r.location) metaPills.push(`<span class="pill">📍 ${r.location}</span>`);
+        if (r.energy) metaPills.push(`<span class="pill">⚡ ${r.energy}</span>`);
+
+        return `<a href="${href}" class="result-card">
+          <h3>${escapeHtml(r.title)}</h3>
+          <div class="snippet">${escapeHtml(r.snippet)}</div>
+          <div class="result-meta">${metaPills.join('')}</div>
+          <div class="score">${pct}% match</div>
+        </a>`;
+      }).join('');
+
+      resultsEl.innerHTML = `
+        <p class="result-count">${results.length} result${results.length!==1?'s':''} (of ${total} files searched)</p>
+        ${html}
+      `;
+    }
+
+    function escapeHtml(s) {
+      const d = document.createElement('div');
+      d.textContent = s;
+      return d.innerHTML;
+    }
+
+    // --- debounce ---
+    let debounceTimer;
+    function onInput() {
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(() => doSearch(queryInput.value), 250);
+    }
+
+    // --- hint chips ---
+    function onHintClick(e) {
+      const btn = e.target.closest('button[data-q]');
+      if (!btn) return;
+      queryInput.value = btn.dataset.q;
+      doSearch(btn.dataset.q);
+      queryInput.focus();
+    }
+
+    // --- wire up ---
+    queryInput.addEventListener('input', onInput);
+    document.querySelector('.search-hints').addEventListener('click', onHintClick);
+
+    // --- go ---
+    init();
+  </script>
+</body>
+</html>

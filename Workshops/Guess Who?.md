@@ -8,6 +8,12 @@ tags:
   - privacy
   - reflection
   - creativity
+type: workshop
+duration: 30
+group_size: 10-25
+materials: paper, pens, printed AI-generated profiles
+location: both
+energy: low
 ---
 
 # Guess Who?

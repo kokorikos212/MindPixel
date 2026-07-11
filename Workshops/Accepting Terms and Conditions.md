@@ -7,6 +7,12 @@ tags:
   - storytelling
   - team-building
   - reflection
+type: workshop
+duration: 30
+group_size: 10-25
+materials: paper or index cards, pens, box or container
+location: both
+energy: medium
 ---
 
 # Accepting Terms and Conditions

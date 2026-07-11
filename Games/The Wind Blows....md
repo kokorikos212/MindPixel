@@ -3,6 +3,12 @@ tags:
   - icebreaker
   - group-interaction
   - movement
+type: game
+duration: 15
+group_size: 10-30
+materials: chairs
+location: indoor
+energy: high
 ---
 
 # The Wind Blows

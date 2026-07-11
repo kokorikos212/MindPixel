@@ -1,5 +1,9 @@
 ---
-tags: [activity]
+tags:
+  - hub
+  - peer-led-learning
+  - workshops
+type: hub
 day: "[[Day 6]]"
 ---
 

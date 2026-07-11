@@ -3,6 +3,12 @@ tags:
   - memory
   - creativity
   - storytelling
+type: game
+duration: 15
+group_size: 6-25
+materials: none
+location: indoor
+energy: low
 ---
 
 # Story Chain

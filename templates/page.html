@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ title }} — MindPixel Toolkit</title>
+  <style>
+    /* ============================================================
+       MindPixel Toolkit — shared styles (page + search)
+       ============================================================ */
+    :root {
+      --bg: #fafaf8;
+      --surface: #ffffff;
+      --text: #1e1e24;
+      --text-secondary: #5e5e6a;
+      --border: #e4e4e0;
+      --accent: #5b6e8a;
+      --accent-soft: #eef1f5;
+      --tag-bg: #edf0f4;
+      --tag-text: #4a5568;
+      --callout-note-bg: #eef5ff;
+      --callout-note-border: #90b8e8;
+      --callout-tip-bg: #edfaf2;
+      --callout-tip-border: #7ec99c;
+      --callout-quote-bg: #faf5ee;
+      --callout-quote-border: #d4b87a;
+      --callout-warning-bg: #fef7ed;
+      --callout-warning-border: #e8b45a;
+      --type-game: #e8f0e4;
+      --type-workshop: #e8eaf4;
+      --type-day-log: #f4ece4;
+      --type-hub: #f0e8f0;
+      --type-page: #e8f0f0;
+      --shadow: 0 1px 3px rgba(0,0,0,.06);
+      --radius: 10px;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a20;
+        --surface: #24242c;
+        --text: #e4e4ec;
+        --text-secondary: #a0a0b0;
+        --border: #363640;
+        --accent: #8ea8cc;
+        --accent-soft: #2a303c;
+        --tag-bg: #2c303a;
+        --tag-text: #b0b8c8;
+        --callout-note-bg: #1c2634;
+        --callout-note-border: #4a6890;
+        --callout-tip-bg: #1c2e22;
+        --callout-tip-border: #4a7858;
+        --callout-quote-bg: #2c2618;
+        --callout-quote-border: #8a7040;
+        --callout-warning-bg: #2c2418;
+        --callout-warning-border: #8a6a30;
+        --type-game: #1c2818;
+        --type-workshop: #1c1e28;
+        --type-day-log: #282018;
+        --type-hub: #241c28;
+        --type-page: #182228;
+        --shadow: 0 1px 3px rgba(0,0,0,.25);
+      }
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 17px; }
+    body {
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+      min-height: 100vh;
+    }
+
+    /* ---- nav ---- */
+    .topnav {
+      display: flex; align-items: center; gap: .75rem; flex-wrap: wrap;
+      padding: .85rem 1.5rem;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      position: sticky; top: 0; z-index: 10;
+      box-shadow: var(--shadow);
+    }
+    .topnav a {
+      text-decoration: none; color: var(--text-secondary);
+      font-weight: 500; font-size: .9rem; padding: .35rem .65rem;
+      border-radius: 6px; transition: background .15s, color .15s;
+    }
+    .topnav a:hover, .topnav a.active { background: var(--accent-soft); color: var(--accent); }
+    .topnav .brand { font-weight: 700; color: var(--text); margin-right: auto; font-size: 1rem; }
+
+    /* ---- main content ---- */
+    .container { max-width: 780px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+    /* ---- metadata bar ---- */
+    .meta-bar {
+      display: flex; flex-wrap: wrap; gap: .45rem; align-items: center;
+      margin: .6rem 0 1.2rem;
+    }
+    .meta-bar .pill {
+      display: inline-flex; align-items: center; gap: .3rem;
+      font-size: .78rem; font-weight: 500; padding: .25rem .6rem;
+      border-radius: 99px; background: var(--tag-bg); color: var(--tag-text);
+      white-space: nowrap;
+    }
+    .meta-bar .pill.type { font-weight: 600; }
+    .meta-bar .pill.type-game { background: var(--type-game); }
+    .meta-bar .pill.type-workshop { background: var(--type-workshop); }
+    .meta-bar .pill.type-day-log { background: var(--type-day-log); }
+    .meta-bar .pill.type-hub { background: var(--type-hub); }
+    .meta-bar .pill.type-page { background: var(--type-page); }
+
+    /* ---- tags ---- */
+    .tags { display: flex; flex-wrap: wrap; gap: .35rem; margin: 1rem 0; }
+    .tags a {
+      font-size: .75rem; text-decoration: none; padding: .2rem .5rem;
+      border-radius: 99px; background: var(--tag-bg); color: var(--tag-text);
+      transition: background .15s;
+    }
+    .tags a:hover { background: var(--accent-soft); color: var(--accent); }
+
+    /* ---- typography ---- */
+    h1 { font-size: 1.9rem; font-weight: 700; line-height: 1.25; margin-bottom: .25rem; letter-spacing: -.02em; }
+    h2 { font-size: 1.35rem; font-weight: 650; margin: 2rem 0 .6rem; }
+    h3 { font-size: 1.1rem; font-weight: 600; margin: 1.5rem 0 .4rem; }
+    p { margin: .7rem 0; }
+    a { color: var(--accent); text-decoration: underline; text-underline-offset: 2px; }
+    a.missing { color: #c06050; text-decoration-style: dashed; }
+    ul, ol { padding-left: 1.5rem; margin: .6rem 0; }
+    li { margin: .25rem 0; }
+    table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: .9rem; }
+    th, td { padding: .55rem .75rem; text-align: left; border-bottom: 1px solid var(--border); }
+    th { font-weight: 650; background: var(--accent-soft); }
+    blockquote {
+      border-left: 3px solid var(--accent); padding: .4rem 1rem;
+      margin: 1rem 0; color: var(--text-secondary); font-style: italic;
+    }
+    hr { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
+    code { font-size: .88em; background: var(--accent-soft); padding: .15em .35em; border-radius: 4px; }
+    pre { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem; overflow-x: auto; margin: 1rem 0; }
+    img { max-width: 100%; border-radius: var(--radius); }
+
+    /* ---- callouts ---- */
+    aside.callout {
+      margin: 1.2rem 0; padding: .8rem 1.1rem;
+      border-radius: var(--radius); border-left: 4px solid;
+      font-size: .94rem;
+    }
+    aside.callout .callout-title { font-weight: 650; margin-bottom: .35rem; }
+    aside.callout-note    { background: var(--callout-note-bg);    border-color: var(--callout-note-border); }
+    aside.callout-tip     { background: var(--callout-tip-bg);     border-color: var(--callout-tip-border); }
+    aside.callout-quote   { background: var(--callout-quote-bg);   border-color: var(--callout-quote-border); }
+    aside.callout-warning { background: var(--callout-warning-bg); border-color: var(--callout-warning-border); }
+
+    /* ---- footer ---- */
+    .page-footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border); color: var(--text-secondary); font-size: .82rem; }
+
+    @media (max-width: 600px) {
+      .container { padding: 1.2rem 1rem 3rem; }
+      h1 { font-size: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="topnav">
+    <a href="index.html" class="brand">🧠 MindPixel</a>
+    <a href="index.html">Home</a>
+    <a href="search.html">🔍 Search</a>
+    <a href="2.%20Table%20of%20contents.html">Contents</a>
+  </nav>
+
+  <main class="container">
+    <h1>{{ title }}</h1>
+
+    {% if type or duration or group_size or materials or location or energy %}
+    <div class="meta-bar">
+      {% if type %}
+      <span class="pill type type-{{ type }}">{{ type | replace('-',' ') | title }}</span>
+      {% endif %}
+      {% if duration %}<span class="pill">⏱ {{ duration }} min</span>{% endif %}
+      {% if group_size %}<span class="pill">👥 {{ group_size }}</span>{% endif %}
+      {% if materials %}<span class="pill">📦 {{ materials }}</span>{% endif %}
+      {% if location %}<span class="pill">📍 {{ location }}</span>{% endif %}
+      {% if energy %}<span class="pill">⚡ {{ energy }}</span>{% endif %}
+    </div>
+    {% endif %}
+
+    {{ content | safe }}
+
+    {% if tags %}
+    <div class="tags">
+      {% for tag in tags %}<a href="search.html?q=%23{{ tag }}">#{{ tag }}</a>{% endfor %}
+    </div>
+    {% endif %}
+
+    <footer class="page-footer">
+      <p>Part of the <strong>MindPixel Toolkit</strong> — an Erasmus+ Training Course resource.</p>
+    </footer>
+  </main>
+</body>
+</html>

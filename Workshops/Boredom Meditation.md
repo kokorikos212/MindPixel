@@ -1,5 +1,17 @@
 ---
-tags: [activity]
+tags:
+  - activity
+  - boredom
+  - mindfulness
+  - creativity
+  - self-reflection
+  - radical-presence
+type: workshop
+duration: 45
+group_size: 5-25
+materials: none
+location: indoor
+energy: low
 day: "[[Day 6]]"
 ---
 

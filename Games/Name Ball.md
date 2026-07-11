@@ -3,6 +3,12 @@ tags:
   - icebreaker
   - name-learning
   - communication
+type: game
+duration: 10
+group_size: 8-30
+materials: soft ball or beanbag
+location: indoor
+energy: medium
 ---
 
 # Name Toss

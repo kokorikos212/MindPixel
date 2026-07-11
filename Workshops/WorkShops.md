@@ -1,3 +1,12 @@
+---
+tags:
+  - hub
+  - workshops
+  - peer-led-learning
+  - non-formal-education
+type: hub
+---
+
 The core of our journey wasn't about passive listening; it was about taking the stage. The workshop logs compiled in this hub represent a dedicated space where the distinction between "trainer" and "participant" dissolved entirely.
 
 International teams of youth workers, educators, and artists stepped up to design, pitch, and facilitate their own experimental sessions. Backed by the quiet inspiration of the Pirin mountains, the surrounding forests became open-air laboratories. Here, participants tested new arts-based methodologies, tackled tough digital dilemmas, and pushed the boundaries of traditional non-formal education.

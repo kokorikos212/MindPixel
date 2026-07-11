@@ -7,6 +7,12 @@ tags:
   - art
   - mindfulness
   - nature
+type: workshop
+duration: 30
+group_size: 10-25
+materials: white paper, pens or pencils, sticky notes
+location: outdoor
+energy: low
 ---
 
 # Befriending Shame

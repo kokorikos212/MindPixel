@@ -3,6 +3,12 @@ tags:
   - observation
   - concentration
   - group-coordination
+type: game
+duration: 10
+group_size: 8-30
+materials: none
+location: indoor
+energy: low
 ---
 
 # Follow the Leader

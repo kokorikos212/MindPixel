@@ -1,5 +1,17 @@
 ---
-tags: [activity]
+tags:
+  - activity
+  - photography
+  - connection
+  - nature
+  - self-reflection
+  - creativity
+type: workshop
+duration: 90
+group_size: 5-25
+materials: camera or phone, paper, pens
+location: outdoor
+energy: low
 day: "[[Day 6]]"
 ---
 

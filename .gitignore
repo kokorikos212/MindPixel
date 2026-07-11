@@ -1,1 +1,6 @@
 Images/
+_site/
+__pycache__/
+*.pyc
+.venv/
+

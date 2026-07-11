@@ -3,6 +3,12 @@ tags:
   - reaction-speed
   - concentration
   - coordination
+type: game
+duration: 10
+group_size: 6-30
+materials: none
+location: indoor
+energy: high
 ---
 
 # Hi, Ha, Ho

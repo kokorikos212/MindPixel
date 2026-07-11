@@ -1,5 +1,17 @@
 ---
-tags: [workshop]
+tags:
+  - workshop
+  - emotions
+  - body-awareness
+  - mindfulness
+  - self-reflection
+  - art
+type: workshop
+duration: 25
+group_size: 5-25
+materials: paper with body outlines, colored pens or markers
+location: indoor
+energy: low
 part-of: "[[3-in-1 Workshops]]"
 facilitator: "[[Luna]]"
 ---

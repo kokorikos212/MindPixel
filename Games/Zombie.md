@@ -3,6 +3,12 @@ tags:
   - teamwork
   - strategy
   - communication
+type: game
+duration: 15
+group_size: 8-25
+materials: chairs
+location: indoor
+energy: medium
 ---
 
 # Zombie Chair

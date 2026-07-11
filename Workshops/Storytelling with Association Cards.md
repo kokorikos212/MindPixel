@@ -1,5 +1,16 @@
 ---
-tags: [workshop]
+tags:
+  - workshop
+  - storytelling
+  - creativity
+  - connection
+  - icebreaker
+type: workshop
+duration: 20
+group_size: 4-25
+materials: association cards
+location: indoor
+energy: medium
 part-of: "[[3-in-1 Workshops]]"
 facilitator: "[[Sophie]]"
 ---
