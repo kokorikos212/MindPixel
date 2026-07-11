@@ -72,6 +72,23 @@
       min-height: 100vh;
     }
 
+    /* ---- slide gallery (images at top of page) ---- */
+    .slide-gallery {
+      overflow-x: auto; scroll-snap-type: x mandatory;
+      padding-bottom: .5rem; margin-bottom: 1.5rem;
+      -webkit-overflow-scrolling: touch;
+    }
+    .slide-gallery p {
+      display: flex; gap: .75rem; margin: 0;
+    }
+    .slide-gallery img {
+      scroll-snap-align: start; max-height: 350px; border-radius: var(--radius);
+      box-shadow: var(--shadow); flex-shrink: 0; max-width: 100%;
+    }
+    @media (max-width: 600px) {
+      .slide-gallery img { max-height: 220px; }
+    }
+
     /* ---- nav ---- */
     .topnav {
       display: flex; align-items: center; gap: .75rem; flex-wrap: wrap;

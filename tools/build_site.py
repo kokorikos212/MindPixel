@@ -168,6 +168,15 @@ def render_page(md_text: str, meta: dict, rel_path: str,
         extensions=["tables", "fenced_code", "codehilite", "toc"],
     )
 
+    # wrap leading images in a gallery div for horizontal scrolling
+    # markdown puts consecutive images in one <p> as: <p><img...><img...></p>
+    html_body = re.sub(
+        r'^(<p>(<img[^>]+>\s*)+</p>\s*)+',
+        lambda m: f'<div class="slide-gallery">{m.group(0)}</div>',
+        html_body,
+        count=1,
+    )
+
     # render into template
     env = Environment(loader=FileSystemLoader(str(TEMPLATES_DIR)))
     template = env.get_template("page.html")
@@ -222,11 +231,16 @@ def main() -> None:
                     pass
                 body = parts[2]
 
-        # add title from first heading if not in meta
+        # add title from first heading, or fall back to filename
         if "title" not in meta:
             m = re.search(r"^#\s+(.+)$", body, re.MULTILINE)
             if m:
                 meta["title"] = m.group(1).strip()
+            else:
+                # fallback: clean up filename
+                name = md_path.stem
+                name = re.sub(r"^\d+\.\s*", "", name)
+                meta["title"] = name
 
         html = render_page(body, meta, rel, name_index)
 
@@ -249,6 +263,15 @@ def main() -> None:
     if index_src.exists():
         shutil.copy2(index_src, OUTPUT_DIR / "search-index.json")
         print("✔  search-index.json copied")
+
+    # copy assets folder (slides, images)
+    assets_src = VAULT_DIR / "assets"
+    if assets_src.is_dir():
+        assets_dst = OUTPUT_DIR / "assets"
+        if assets_dst.exists():
+            shutil.rmtree(assets_dst)
+        shutil.copytree(assets_src, assets_dst)
+        print("✔  assets/ copied")
 
     print("Done.")
 
