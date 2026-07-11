@@ -162,11 +162,19 @@ def render_page(md_text: str, meta: dict, rel_path: str,
     # strip the first H1 heading (it's already in the template)
     text = re.sub(r"^#\s+.+(\n|$)", "", text, count=1).strip()
 
+    # compute directory depth for relative asset paths
+    depth = rel_path.count("/")
+    prefix = "../" * depth if depth > 0 else ""
+
     # standard markdown → html
     html_body = markdown.markdown(
         text,
         extensions=["tables", "fenced_code", "codehilite", "toc"],
     )
+
+    # fix relative asset paths for subdirectory pages
+    if prefix:
+        html_body = html_body.replace('src="assets/', f'src="{prefix}assets/')
 
     # wrap leading images in a gallery div for horizontal scrolling
     # markdown puts consecutive images in one <p> as: <p><img...><img...></p>
