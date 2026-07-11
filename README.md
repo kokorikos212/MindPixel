@@ -7,7 +7,7 @@
 
 We explore the intersection of **digital safety, data protection, artificial intelligence, and youth mental wellbeing** — not through lectures, but through **creative, arts-based methods**. Art, games, poetry, and reflection become tools for understanding how technology shapes young people's lives.
 
-> 🌐 **Live site:** [kokorikos212.github.io/MindPixel](https://kokorikos212.github.io/MindPixel/)
+> 🌐 **Live site:** [kokorikos212.github.io/MindPixel](https://kokorikos212.github.io/MindPixel/search.html)
 
 ---
 
