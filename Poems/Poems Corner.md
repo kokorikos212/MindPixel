@@ -1,3 +1,3 @@
-![Poem](assets/slides/02-poem.jpeg)
+![Poem](Verse/assets/slides/poem2.jpeg)
 
-![Poem](assets/slides/03-poem.jpeg)
+![Poem](Verse/assets/slides/poem3.jpeg)
