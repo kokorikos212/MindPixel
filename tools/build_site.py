@@ -205,6 +205,7 @@ def render_page(md_text: str, meta: dict, rel_path: str,
         tags=tags,
         content=html_body,
         path=rel_path,
+        prefix=prefix,
     )
 
 
@@ -280,6 +281,21 @@ def main() -> None:
             shutil.rmtree(assets_dst)
         shutil.copytree(assets_src, assets_dst)
         print("✔  assets/ copied")
+
+    # create index.html that redirects to the welcome page
+    index_html = """<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="refresh" content="0;url=1.Welcome%20to%20MindPixel.html">
+  <title>MindPixel Toolkit</title>
+</head>
+<body>
+  <p>Redirecting to <a href="1.Welcome%20to%20MindPixel.html">MindPixel Toolkit</a>…</p>
+</body>
+</html>"""
+    (OUTPUT_DIR / "index.html").write_text(index_html)
+    print("✔  index.html created")
 
     print("Done.")
 
