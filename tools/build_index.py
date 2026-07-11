@@ -114,10 +114,14 @@ def main() -> None:
         records[i]["embedding"] = vec.tolist()
 
     # write combined index --------------------------------------------------
-    index_path = OUTPUT_DIR / "search-index.json"
-    index_path.write_text(json.dumps(records, ensure_ascii=False), encoding="utf-8")
-    size_mb = index_path.stat().st_size / (1024 * 1024)
-    print(f"✔  search-index.json  ({len(records)} entries, {size_mb:.1f} MB)")
+    # write to repo root (committed, used by CI) and _site/ (local serving)
+    for dest in [VAULT_DIR, OUTPUT_DIR]:
+        dest.mkdir(parents=True, exist_ok=True)
+        index_path = dest / "search-index.json"
+        index_path.write_text(json.dumps(records, ensure_ascii=False), encoding="utf-8")
+        if dest == VAULT_DIR:
+            size_mb = index_path.stat().st_size / (1024 * 1024)
+            print(f"✔  search-index.json  ({len(records)} entries, {size_mb:.1f} MB)")
 
     # also write a lightweight metadata file (no vectors) for browsing -----
     meta_only = [{k: v for k, v in r.items() if k != "embedding"} for r in records]

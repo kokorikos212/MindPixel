@@ -244,6 +244,12 @@ def main() -> None:
         shutil.copy2(search_src, OUTPUT_DIR / "search.html")
         print("✔  search.html copied")
 
+    # copy pre-computed search index (may not exist in CI — that's ok)
+    index_src = VAULT_DIR / "search-index.json"
+    if index_src.exists():
+        shutil.copy2(index_src, OUTPUT_DIR / "search-index.json")
+        print("✔  search-index.json copied")
+
     print("Done.")
 
 

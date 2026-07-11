@@ -29,10 +29,7 @@ jobs:
           cache: pip
 
       - name: Install dependencies
-        run: pip install -r tools/requirements.txt
-
-      - name: Build search index (embeddings)
-        run: python tools/build_index.py
+        run: pip install pyyaml markdown jinja2
 
       - name: Build static HTML site
         run: python tools/build_site.py
