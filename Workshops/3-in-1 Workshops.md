@@ -4,7 +4,7 @@ tags:
   - peer-led-learning
   - workshops
 type: hub
-day: "[[Day 6]]"
+day: "[[06. Day 6 — Sound, Rest & Presence]]"
 ---
 
 # 3-in-1 Workshops
