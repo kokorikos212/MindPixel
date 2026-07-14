@@ -1,0 +1,263 @@
+{
+  "main": {
+    "id": "cc5745269e281fd7",
+    "type": "split",
+    "children": [
+      {
+        "id": "fd6d4bdc2f52c58b",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "d8369826c49660a4",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Workshops/3-in-1 Workshops.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "3-in-1 Workshops"
+            }
+          },
+          {
+            "id": "141aed53f97c74af",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Games/Hi Ha Ho.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Hi Ha Ho"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "21a0496140ca0ee0",
+    "type": "split",
+    "children": [
+      {
+        "id": "eaa62bfda77de282",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "897d744915c756eb",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "ee9d1d0faeed0b6b",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "workshops",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "17a6459519cd0beb",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "f997b3e6c640b7bb",
+    "type": "split",
+    "children": [
+      {
+        "id": "9d261f1c8d958523",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "39419bb261b9a1c2",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "Workshops/3-in-1 Workshops.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks for 3-in-1 Workshops"
+            }
+          },
+          {
+            "id": "8c7de63f5bcffdc4",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "Workshops/3-in-1 Workshops.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links from 3-in-1 Workshops"
+            }
+          },
+          {
+            "id": "5fe70a754e69561a",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "864c61eca3466500",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "All properties"
+            }
+          },
+          {
+            "id": "9249cdc09a7e8739",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "Workshops/3-in-1 Workshops.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Outline of 3-in-1 Workshops"
+            }
+          },
+          {
+            "id": "e1c39e35167b0f47",
+            "type": "leaf",
+            "state": {
+              "type": "footnotes",
+              "state": {
+                "file": "Workshops/3-in-1 Workshops.md"
+              },
+              "icon": "lucide-file-signature",
+              "title": "Footnotes"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "bases:Create new base": false,
+      "markdown-importer:Open format converter": false,
+      "publish:Publish changes...": false,
+      "random-note:Open random note": false,
+      "audio-recorder:Start/stop recording": false
+    }
+  },
+  "active": "d8369826c49660a4",
+  "lastOpenFiles": [
+    "Games/Hi Ha Ho.md",
+    "Games/Follow the Leader.md",
+    "Games/Energizers - Games.md",
+    "Days/08. Day 8 - Synthesizing the Toolkit - From Experience to Resource.md",
+    "Days/07. Day 7 — The Artathon - Co-Creation in the Forest.md",
+    "Days/06. Day 6 — In pursuit of connection.md",
+    "Days/05. Day 5 — Sun, Rest & Presence.md",
+    "Days/04. Day 4 — Algorithms Under the Microscope.md",
+    "Days/03. Day 3 - Layers of Exposure - Art, Footprints, and Vulnerability.md",
+    "Days/02. Day 2 - Turning Inward - Beyond the Digital Facade.md",
+    "Days/01. Day 1 — Common Ground & Connections.md",
+    "assets/slides/day2.jpeg",
+    "assets/slides/activity.jpeg",
+    "Workshops/Music into Emotion Drawings.md",
+    "Workshops/Guess Who?.md",
+    "Workshops/Boredom Meditation.md",
+    "Workshops/Body Map & Two-Hand Dialogue.md",
+    "Workshops/Befriending shame.md",
+    "Workshops/Accepting Terms and Conditions.md",
+    "Workshops/3-in-1 Workshops.md",
+    "1.Welcome to MindPixel.md",
+    "assets/slides/poem1.jpeg",
+    "assets/slides/ledgend.jpeg",
+    "assets/slides/Layout.jpeg",
+    "Workshops/Photo Journal.md",
+    "assets/slides/Intro.jpeg",
+    "assets/slides/soundscapes.jpeg",
+    "assets/slides/free_day.jpeg",
+    "Participants.md",
+    "Untitled.canvas",
+    "The Daily Rhythm.md",
+    "Untitled.canvas.tmp.30067.a9d99645939f",
+    "templates/page.html.tmp.30067.d748eeaf4b6d",
+    "templates/page.html.tmp.30067.107f05d356c3",
+    "1.Welcome to MindPixel.md.tmp.30067.c1f1fd0d419a",
+    "1.Welcome to MindPixel.md.tmp.30067.7121834f98d8",
+    "1.Welcome to MindPixel.md.tmp.30067.695a7dff4d45",
+    "_site/roadmap.html",
+    "templates/page.html.tmp.30067.054426dd890b",
+    "tools/build_site.py.tmp.30067.eb0a948f833b",
+    "roadmap.html",
+    "2. Table of contents.md",
+    "Table of Contents.md",
+    "The GameBox.md"
+  ]
+}

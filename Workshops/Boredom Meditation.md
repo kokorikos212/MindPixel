@@ -12,7 +12,7 @@ group_size: 5-25
 materials: none
 location: indoor
 energy: low
-day: "[[06. Day 6 — Sound, Rest & Presence]]"
+day: "[[06. Day 6 — In pursuit of connection]]"
 ---
 
 # Boredom Meditation

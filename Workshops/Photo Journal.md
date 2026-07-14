@@ -12,7 +12,7 @@ group_size: 5-25
 materials: camera or phone, paper, pens
 location: outdoor
 energy: low
-day: "[[06. Day 6 — Sound, Rest & Presence]]"
+day: "[[06. Day 6 — In pursuit of connection]]"
 ---
 
 # Photo Journal — In Pursuit of Connection

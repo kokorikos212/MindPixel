@@ -4,10 +4,11 @@ tags:
   - peer-led-learning
   - workshops
 type: hub
-day: "[[06. Day 6 — Sound, Rest & Presence]]"
+day: "[[06. Day 6 — In pursuit of connection]]"
 ---
 
-# 3-in-1 Workshops
+
+![Poem](assets/slides/poem1.jpeg)
 
 Three short participant-led workshops by [[Sophie]], [[Luna]] and [[Jēkabs]] — inspired by how proactive some participants were, and a gentle introduction to the next day's activities.
 
@@ -17,3 +18,5 @@ Three short participant-led workshops by [[Sophie]], [[Luna]] and [[Jēkabs]] �
 
 > [!quote] [[Liza]]
 > I really liked the participants' workshops as it showed their approaches in their youth work practice — it's always cool to get practical insights directly from the people involved in it actively.
+
+
