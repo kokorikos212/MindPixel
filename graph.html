@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Graph — MindPixel Toolkit</title>
+  <style>
+    /* ============================================================
+       Shared styles (mirrors page.html + search.html)
+       ============================================================ */
+    :root {
+      --bg: #fafaf8; --surface: #ffffff; --text: #1e1e24;
+      --text-secondary: #5e5e6a; --border: #e4e4e0;
+      --accent: #5b6e8a; --accent-soft: #eef1f5;
+      --tag-bg: #edf0f4; --tag-text: #4a5568;
+      --shadow: 0 1px 3px rgba(0,0,0,.06);
+      --radius: 10px;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a20; --surface: #24242c; --text: #e4e4ec;
+        --text-secondary: #a0a0b0; --border: #363640;
+        --accent: #8ea8cc; --accent-soft: #2a303c;
+        --tag-bg: #2c303a; --tag-text: #b0b8c8;
+        --shadow: 0 1px 3px rgba(0,0,0,.25);
+      }
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; overflow: hidden; }
+    body {
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg); color: var(--text);
+    }
+
+    /* ---- nav ---- */
+    .topnav {
+      display: flex; align-items: center; gap: .75rem; flex-wrap: wrap;
+      padding: .6rem 1.2rem;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      position: relative; z-index: 20;
+      box-shadow: var(--shadow);
+    }
+    .topnav a {
+      text-decoration: none; color: var(--text-secondary);
+      font-weight: 500; font-size: .85rem; padding: .3rem .55rem;
+      border-radius: 6px; transition: background .15s, color .15s;
+    }
+    .topnav a:hover, .topnav a.active { background: var(--accent-soft); color: var(--accent); }
+    .topnav .brand { font-weight: 700; color: var(--text); margin-right: auto; font-size: .95rem; }
+
+    /* ---- graph container ---- */
+    #graph-container {
+      position: absolute; top: 48px; left: 0; right: 0; bottom: 0;
+      cursor: grab;
+    }
+    #graph-container:active { cursor: grabbing; }
+    #graph-container svg { width: 100%; height: 100%; }
+
+    /* ---- tooltip ---- */
+    .tooltip {
+      position: absolute; pointer-events: none; z-index: 30;
+      background: var(--surface); color: var(--text);
+      border: 1px solid var(--border); border-radius: 8px;
+      padding: .55rem .8rem; font-size: .85rem;
+      box-shadow: 0 4px 16px rgba(0,0,0,.12);
+      opacity: 0; transition: opacity .15s;
+      white-space: nowrap; max-width: 300px;
+    }
+    .tooltip .title { font-weight: 650; margin-bottom: .15rem; }
+    .tooltip .meta { font-size: .72rem; color: var(--text-secondary); }
+
+    /* ---- legend ---- */
+    .legend {
+      position: absolute; bottom: 20px; left: 20px; z-index: 15;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: .7rem .9rem;
+      font-size: .75rem; box-shadow: var(--shadow);
+      display: flex; flex-wrap: wrap; gap: .5rem;
+    }
+    .legend-item { display: flex; align-items: center; gap: .35rem; }
+    .legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+
+    /* ---- info bar ---- */
+    .info-bar {
+      position: absolute; top: 58px; right: 15px; z-index: 15;
+      font-size: .75rem; color: var(--text-secondary);
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 8px; padding: .35rem .65rem;
+      box-shadow: var(--shadow);
+    }
+
+    /* node + link styles */
+    .node { cursor: pointer; }
+    .node circle { stroke: var(--bg); stroke-width: 1.5px; transition: r .2s ease; }
+    .link { stroke: var(--border); stroke-opacity: 0.6; }
+    .link:hover { stroke: var(--accent); stroke-opacity: 0.9; }
+
+    @media (max-width: 600px) {
+      .legend { bottom: 10px; left: 10px; padding: .45rem .6rem; font-size: .7rem; gap: .35rem; }
+      .info-bar { top: 52px; right: 8px; font-size: .68rem; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="topnav">
+    <a href="1.Welcome%20to%20MindPixel.html" class="brand">🧠 MindPixel</a>
+    <a href="1.Welcome%20to%20MindPixel.html">Home</a>
+    <a href="search.html">🔍 Search</a>
+    <a href="graph.html" class="active">🕸 Graph</a>
+    <a href="2.%20Table%20of%20contents.html">Contents</a>
+  </nav>
+
+  <div id="graph-container"></div>
+
+  <div class="tooltip" id="tooltip">
+    <div class="title"></div>
+    <div class="meta"></div>
+  </div>
+
+  <div class="legend" id="legend"></div>
+
+  <div class="info-bar" id="info-bar">Loading…</div>
+
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <script>
+  // ==================================================================
+  //  MindPixel Graph Overview — Obsidian-style node-link diagram
+  //  Powered by D3.js force simulation
+  // ==================================================================
+
+  (async function() {
+    const container = document.getElementById('graph-container');
+    const tooltip = document.getElementById('tooltip');
+    const legendEl = document.getElementById('legend');
+    const infoBar = document.getElementById('info-bar');
+
+    // --- color palette by group ---
+    const GROUP_COLORS = {
+      'root':    '#5b6e8a',  // slate blue
+      'Days':    '#c8845c',  // terracotta
+      'Games':   '#6aab7a',  // sage green
+      'Workshops':'#8a7aba', // lavender
+      'Poems':   '#c87ab8',  // mauve
+    };
+    const DEFAULT_COLOR = '#8899aa';
+
+    function groupColor(group) {
+      return GROUP_COLORS[group] || DEFAULT_COLOR;
+    }
+
+    // --- load data ---
+    let data;
+    try {
+      const resp = await fetch('graph-data.json');
+      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+      data = await resp.json();
+    } catch (err) {
+      infoBar.textContent = '⚠ Could not load graph data.';
+      console.error(err);
+      return;
+    }
+
+    const { nodes, edges } = data;
+    if (!nodes.length) {
+      infoBar.textContent = 'No nodes found.';
+      return;
+    }
+
+    infoBar.textContent = `${nodes.length} pages · ${edges.length} links`;
+
+    // --- build legend ---
+    const groups = [...new Set(nodes.map(n => n.group))].sort();
+    legendEl.innerHTML = groups.map(g =>
+      `<span class="legend-item"><span class="legend-dot" style="background:${groupColor(g)}"></span>${g}</span>`
+    ).join('');
+
+    // --- compute node radius from degree ---
+    const maxDegree = Math.max(1, ...nodes.map(n => n.degree));
+    const MIN_R = 5, MAX_R = 18;
+    const radiusScale = d3.scaleSqrt()
+      .domain([0, maxDegree])
+      .range([MIN_R, MAX_R]);
+
+    // --- lookup maps ---
+    const nodeById = new Map(nodes.map(n => [n.id, n]));
+
+    // --- prepare data for D3 ---
+    const simNodes = nodes.map(n => ({ ...n }));
+    const simEdges = edges
+      .filter(e => nodeById.has(e.source) && nodeById.has(e.target))
+      .map(e => ({ source: e.source, target: e.target }));
+
+    // --- set up SVG ---
+    const width = container.clientWidth;
+    const height = container.clientHeight;
+    const svg = d3.select('#graph-container')
+      .append('svg')
+      .attr('viewBox', [0, 0, width, height]);
+
+    // zoom group
+    const g = svg.append('g');
+
+    // zoom behaviour
+    const zoom = d3.zoom()
+      .scaleExtent([0.15, 4])
+      .on('zoom', (event) => { g.attr('transform', event.transform); });
+    svg.call(zoom);
+
+    // --- draw links ---
+    const link = g.append('g')
+      .selectAll('line')
+      .data(simEdges)
+      .join('line')
+      .attr('class', 'link')
+      .attr('stroke-width', 0.8);
+
+    // --- draw nodes ---
+    const node = g.append('g')
+      .selectAll('g')
+      .data(simNodes)
+      .join('g')
+      .attr('class', 'node')
+      .call(d3.drag()
+        .on('start', (event, d) => {
+          if (!event.active) simulation.alphaTarget(0.3).restart();
+          d.fx = d.x; d.fy = d.y;
+        })
+        .on('drag', (event, d) => {
+          d.fx = event.x; d.fy = event.y;
+        })
+        .on('end', (event, d) => {
+          if (!event.active) simulation.alphaTarget(0);
+          d.fx = null; d.fy = null;
+        })
+      );
+
+    node.append('circle')
+      .attr('r', d => radiusScale(d.degree))
+      .attr('fill', d => groupColor(d.group))
+      .attr('opacity', 0.88);
+
+    // --- interactions ---
+    node.on('mouseenter', function(event, d) {
+      d3.select(this).select('circle')
+        .transition().duration(150)
+        .attr('r', radiusScale(d.degree) * 1.5)
+        .attr('opacity', 1);
+
+      const metaParts = [];
+      if (d.type) metaParts.push(d.type);
+      if (d.degree) metaParts.push(`${d.degree} link${d.degree !== 1 ? 's' : ''}`);
+
+      tooltip.querySelector('.title').textContent = d.title;
+      tooltip.querySelector('.meta').textContent = metaParts.join(' · ');
+      tooltip.style.opacity = 1;
+    });
+
+    node.on('mousemove', function(event) {
+      const tx = event.pageX + 14;
+      const ty = event.pageY - 10;
+      tooltip.style.left = tx + 'px';
+      tooltip.style.top = ty + 'px';
+    });
+
+    node.on('mouseleave', function(event, d) {
+      d3.select(this).select('circle')
+        .transition().duration(200)
+        .attr('r', radiusScale(d.degree))
+        .attr('opacity', 0.88);
+      tooltip.style.opacity = 0;
+    });
+
+    node.on('click', (event, d) => {
+      // navigate on click (unless dragging)
+      if (event.defaultPrevented) return;
+      window.location.href = d.path;
+    });
+
+    // --- force simulation ---
+    const simulation = d3.forceSimulation(simNodes)
+      .force('link', d3.forceLink(simEdges)
+        .id(d => d.id)
+        .distance(80)
+        .strength(0.4))
+      .force('charge', d3.forceManyBody()
+        .strength(-180)
+        .distanceMax(400))
+      .force('center', d3.forceCenter(width / 2, height / 2))
+      .force('collision', d3.forceCollide()
+        .radius(d => radiusScale(d.degree) + 3))
+      .on('tick', () => {
+        link
+          .attr('x1', d => d.source.x)
+          .attr('y1', d => d.source.y)
+          .attr('x2', d => d.target.x)
+          .attr('y2', d => d.target.y);
+
+        node.attr('transform', d => `translate(${d.x},${d.y})`);
+      });
+
+    // --- gentle auto-zoom to fit ---
+    setTimeout(() => {
+      const bbox = g.node().getBBox();
+      const pad = 60;
+      const scale = Math.min(
+        (width - pad * 2) / bbox.width,
+        (height - pad * 2) / bbox.height,
+        1.6
+      );
+      const cx = bbox.x + bbox.width / 2;
+      const cy = bbox.y + bbox.height / 2;
+      svg.transition().duration(800).call(
+        zoom.transform,
+        d3.zoomIdentity
+          .translate(width / 2, height / 2)
+          .scale(scale)
+          .translate(-cx, -cy)
+      );
+    }, 1200);
+
+    // --- handle resize ---
+    window.addEventListener('resize', () => {
+      const w = container.clientWidth;
+      const h = container.clientHeight;
+      svg.attr('viewBox', [0, 0, w, h]);
+      simulation.force('center', d3.forceCenter(w / 2, h / 2));
+      simulation.alpha(0.1).restart();
+    });
+
+  })();
+  </script>
+</body>
+</html>

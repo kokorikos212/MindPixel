@@ -210,6 +210,100 @@ def render_page(md_text: str, meta: dict, rel_path: str,
 
 
 # ---------------------------------------------------------------------------
+# graph data generator
+# ---------------------------------------------------------------------------
+
+WIKI_LINK_RE = re.compile(r"\[\[([^\]|#]+)(?:[|#][^\]]+)?\]\]")
+
+
+def build_graph_data(vault_dir: Path, output_dir: Path,
+                     name_index: Dict[str, str]) -> None:
+    """
+    Scan every .md file for [[wiki-links]], build a nodes+edges JSON
+    structure for the Obsidian-style graph view, and write it to _site/.
+    """
+    nodes: list[dict] = []
+    edges_set: set[tuple[str, str]] = set()
+    node_ids: set[str] = set()
+
+    for md_path in sorted(vault_dir.rglob("*.md")):
+        if any(d in md_path.parts for d in SKIP_DIRS):
+            continue
+
+        rel = str(md_path.relative_to(vault_dir))
+        raw = md_path.read_text(encoding="utf-8")
+
+        # parse frontmatter
+        meta: dict = {}
+        body = raw
+        if raw.startswith("---"):
+            parts = raw.split("---", 2)
+            if len(parts) >= 3:
+                try:
+                    meta = yaml.safe_load(parts[1]) or {}
+                except yaml.YAMLError:
+                    pass
+                body = parts[2]
+
+        # title
+        title = meta.get("title", "")
+        if not title:
+            m = re.search(r"^#\s+(.+)$", body, re.MULTILINE)
+            if m:
+                title = m.group(1).strip()
+            else:
+                title = re.sub(r"^\d+\.\s*", "", md_path.stem)
+
+        source_id = md_path.stem
+        node_ids.add(source_id)
+
+        # determine group from folder
+        group = rel.split("/")[0] if "/" in rel else "root"
+        if group.endswith(".md"):
+            group = "root"
+
+        tags = meta.get("tags", [])
+        if isinstance(tags, str):
+            tags = [tags]
+
+        # count outgoing links for degree (we sum later)
+        links = WIKI_LINK_RE.findall(body)
+        degree_out = 0
+
+        for target in links:
+            target = target.strip()
+            if target in name_index:
+                edges_set.add((source_id, target))
+                degree_out += 1
+
+        nodes.append({
+            "id": source_id,
+            "title": title,
+            "path": name_index.get(source_id, rel.replace(".md", ".html")),
+            "type": meta.get("type", ""),
+            "group": group,
+            "degree": degree_out,
+            "tags": tags,
+        })
+
+    # second pass: add incoming degree
+    degree_in: dict[str, int] = {}
+    for _, target in edges_set:
+        degree_in[target] = degree_in.get(target, 0) + 1
+
+    for node in nodes:
+        node["degree"] = node["degree"] + degree_in.get(node["id"], 0)
+
+    # edges list
+    edges = [{"source": s, "target": t} for s, t in sorted(edges_set)]
+
+    graph_data = {"nodes": nodes, "edges": edges}
+    graph_path = output_dir / "graph-data.json"
+    graph_path.write_text(json.dumps(graph_data, ensure_ascii=False), encoding="utf-8")
+    print(f"✔  graph-data.json  ({len(nodes)} nodes, {len(edges)} edges)")
+
+
+# ---------------------------------------------------------------------------
 # main
 # ---------------------------------------------------------------------------
 
@@ -261,11 +355,21 @@ def main() -> None:
 
     print(f"✔  {file_count} HTML pages written to {OUTPUT_DIR}")
 
+    # generate graph data for the graph overview page
+    print("▸ Building graph data …")
+    build_graph_data(VAULT_DIR, OUTPUT_DIR, name_index)
+
     # copy search.html if it exists at vault root
     search_src = VAULT_DIR / "search.html"
     if search_src.exists():
         shutil.copy2(search_src, OUTPUT_DIR / "search.html")
         print("✔  search.html copied")
+
+    # copy graph.html if it exists at vault root
+    graph_src = VAULT_DIR / "graph.html"
+    if graph_src.exists():
+        shutil.copy2(graph_src, OUTPUT_DIR / "graph.html")
+        print("✔  graph.html copied")
 
     # copy pre-computed search index (may not exist in CI — that's ok)
     index_src = VAULT_DIR / "search-index.json"
