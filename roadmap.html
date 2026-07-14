@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Roadmap — MindPixel Toolkit</title>
+  <style>
+    /* ============================================================
+       Shared design tokens (mirrors page.html + graph.html)
+       ============================================================ */
+    :root {
+      --bg: #fafaf8; --surface: #ffffff; --text: #1e1e24;
+      --text-secondary: #5e5e6a; --border: #e4e4e0;
+      --accent: #5b6e8a; --accent-soft: #eef1f5;
+      --tag-bg: #edf0f4; --tag-text: #4a5568;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,.06);
+      --shadow-md: 0 4px 16px rgba(0,0,0,.08);
+      --shadow-lg: 0 8px 32px rgba(0,0,0,.10);
+      --radius: 10px; --radius-sm: 7px;
+      --color-root: #5b6e8a; --color-days: #c8845c;
+      --color-games: #6aab7a; --color-workshops: #8a7aba;
+      --color-poems: #c87ab8; --color-community: #5a9ea8;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a20; --surface: #24242c; --text: #e4e4ec;
+        --text-secondary: #a0a0b0; --border: #363640;
+        --accent: #8ea8cc; --accent-soft: #2a303c;
+        --tag-bg: #2c303a; --tag-text: #b0b8c8;
+        --shadow-sm: 0 1px 3px rgba(0,0,0,.25);
+        --shadow-md: 0 4px 16px rgba(0,0,0,.35);
+        --shadow-lg: 0 8px 32px rgba(0,0,0,.45);
+        --color-root: #8ea8cc; --color-days: #dca47a;
+        --color-games: #82c494; --color-workshops: #a89ad4;
+        --color-poems: #d898c8; --color-community: #72b8c4;
+      }
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg); color: var(--text); line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* ---- nav ---- */
+    .topnav {
+      display: flex; align-items: center; gap: .75rem; flex-wrap: wrap;
+      padding: .6rem 1.2rem;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      position: sticky; top: 0; z-index: 20;
+      box-shadow: var(--shadow-sm);
+    }
+    .topnav a {
+      text-decoration: none; color: var(--text-secondary);
+      font-weight: 500; font-size: .85rem; padding: .3rem .55rem;
+      border-radius: 6px; transition: background .15s, color .15s;
+    }
+    .topnav a:hover, .topnav a.active { background: var(--accent-soft); color: var(--accent); }
+    .topnav .brand { font-weight: 700; color: var(--text); margin-right: auto; font-size: .95rem; }
+    .topnav .spacer { flex: 1; }
+
+    /* ---- hero ---- */
+    .roadmap-hero {
+      text-align: center; padding: 2.5rem 1.5rem 1.5rem;
+      max-width: 780px; margin: 0 auto;
+    }
+    .roadmap-hero h1 { font-size: 1.8rem; font-weight: 700; letter-spacing: -.02em; margin-bottom: .35rem; }
+    .roadmap-hero p { color: var(--text-secondary); font-size: .95rem; max-width: 540px; margin: 0 auto; }
+
+    /* ---- legend strip ---- */
+    .legend-strip {
+      display: flex; flex-wrap: wrap; justify-content: center; gap: .6rem;
+      max-width: 780px; margin: 0 auto 1rem; padding: 0 1.5rem;
+    }
+    .legend-strip .chip {
+      font-size: .73rem; font-weight: 500; padding: .25rem .6rem;
+      border-radius: 99px; color: #fff; opacity: .92;
+    }
+
+    /* ---- canvas container ---- */
+    .canvas-container {
+      max-width: 1100px; margin: 0 auto; padding: 1rem 1.5rem 4rem;
+    }
+
+    /* ---- section ---- */
+    .canvas-section {
+      margin-bottom: 2.8rem;
+    }
+    .section-header {
+      display: flex; align-items: center; gap: .5rem; margin-bottom: 1rem;
+      padding-bottom: .45rem; border-bottom: 2px solid var(--border);
+    }
+    .section-header .icon { font-size: 1.2rem; }
+    .section-header h2 { font-size: 1.15rem; font-weight: 650; }
+    .section-header .count {
+      font-size: .75rem; color: var(--text-secondary);
+      background: var(--tag-bg); padding: .15rem .5rem; border-radius: 99px;
+    }
+
+    /* ---- card grid ---- */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: .7rem;
+    }
+    .card-grid.timeline {
+      grid-template-columns: repeat(8, 1fr);
+      overflow-x: auto; gap: .5rem;
+      padding-bottom: .4rem;
+      scroll-snap-type: x proximity;
+    }
+    @media (max-width: 900px) {
+      .card-grid.timeline { grid-template-columns: repeat(8, 140px); }
+    }
+
+    /* ---- card ---- */
+    .card {
+      display: flex; flex-direction: column; gap: .35rem;
+      padding: .8rem .9rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      cursor: pointer; text-decoration: none; color: inherit;
+      transition: transform .18s, box-shadow .18s, border-color .18s;
+      position: relative; overflow: hidden;
+      scroll-snap-align: start;
+    }
+    .card::before {
+      content: ''; position: absolute; top: 0; left: 0;
+      width: 4px; height: 100%;
+    }
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-lg);
+      border-color: var(--accent);
+    }
+    .card:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+    /* card accent bar by group */
+    .card.group-root::before      { background: var(--color-root); }
+    .card.group-Days::before      { background: var(--color-days); }
+    .card.group-Games::before     { background: var(--color-games); }
+    .card.group-Workshops::before { background: var(--color-workshops); }
+    .card.group-Poems::before     { background: var(--color-poems); }
+
+    .card .card-title {
+      font-size: .85rem; font-weight: 600; line-height: 1.3;
+      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .card .card-type {
+      font-size: .7rem; font-weight: 500; text-transform: uppercase;
+      letter-spacing: .04em; opacity: .7;
+    }
+    .card .card-degree {
+      font-size: .68rem; color: var(--text-secondary);
+      display: flex; align-items: center; gap: .2rem; margin-top: auto;
+    }
+    .card .card-tags {
+      display: flex; flex-wrap: wrap; gap: .2rem; margin-top: .15rem;
+    }
+    .card .card-tags span {
+      font-size: .65rem; padding: .1rem .35rem; border-radius: 99px;
+      background: var(--tag-bg); color: var(--tag-text);
+    }
+
+    /* hub card — slightly larger */
+    .card.hub {
+      grid-column: span 2;
+    }
+    .card.hub .card-title { font-size: .92rem; }
+
+    /* ---- connector hint ---- */
+    .section-connector {
+      display: flex; justify-content: center; padding: .4rem 0;
+      color: var(--text-secondary); font-size: 1.2rem; opacity: .4;
+    }
+
+    /* ---- empty / loading ---- */
+    .loading-msg {
+      text-align: center; padding: 4rem 1rem; color: var(--text-secondary);
+    }
+    .loading-msg .spinner {
+      display: inline-block; width: 28px; height: 28px;
+      border: 3px solid var(--border); border-top-color: var(--accent);
+      border-radius: 50%; animation: spin .7s linear infinite; margin-bottom: .8rem;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ---- footer ---- */
+    .page-footer {
+      text-align: center; padding: 2rem 1.5rem 3rem;
+      color: var(--text-secondary); font-size: .8rem;
+      border-top: 1px solid var(--border); max-width: 1100px; margin: 0 auto;
+    }
+
+    @media (max-width: 600px) {
+      .roadmap-hero { padding: 1.5rem 1rem 1rem; }
+      .roadmap-hero h1 { font-size: 1.4rem; }
+      .canvas-container { padding: .5rem .8rem 3rem; }
+      .card-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+      .card { padding: .65rem .7rem; }
+      .card .card-title { font-size: .78rem; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="topnav">
+    <a href="1.Welcome%20to%20MindPixel.html" class="brand">🧠 MindPixel</a>
+    <a href="1.Welcome%20to%20MindPixel.html">Home</a>
+    <a href="search.html">🔍 Search</a>
+    <a href="graph.html">🕸 Graph</a>
+    <a href="roadmap.html" class="active">🗺 Roadmap</a>
+    <a href="2.%20Table%20of%20contents.html">Contents</a>
+  </nav>
+
+  <div class="roadmap-hero">
+    <h1>Project Roadmap</h1>
+    <p>A visual canvas of the entire toolkit — every workshop, game, and daily log at your fingertips.</p>
+  </div>
+
+  <div class="legend-strip" id="legend"></div>
+
+  <div class="canvas-container" id="canvas">
+    <div class="loading-msg">
+      <div class="spinner"></div>
+      <p>Loading roadmap…</p>
+    </div>
+  </div>
+
+  <footer class="page-footer">
+    <p>Part of the <strong>MindPixel Toolkit</strong> — an Erasmus+ Training Course resource.</p>
+  </footer>
+
+  <script>
+  // ==================================================================
+  //  MindPixel Roadmap — curated interactive canvas
+  // ==================================================================
+
+  (async function() {
+    const canvas = document.getElementById('canvas');
+    const legend = document.getElementById('legend');
+
+    // --- section definitions (order, icon, which nodes to include) ---
+    const SECTIONS = [
+      {
+        id: 'foundations', icon: '🧭', label: 'Foundations',
+        groups: ['root'],
+        filter: n => ['1.Welcome to MindPixel','3.How to Use This Toolkit','2. Table of contents'].includes(n.id),
+        sort: n => ['1.Welcome to MindPixel','3.How to Use This Toolkit','2. Table of contents'].indexOf(n.id),
+      },
+      {
+        id: 'journey', icon: '📅', label: 'The Journey — Daily Logs',
+        groups: ['Days'],
+        filter: n => n.group === 'Days',
+        sort: n => n.title,
+        timeline: true,
+      },
+      {
+        id: 'games', icon: '🎲', label: 'Energizers & Games',
+        groups: ['Games'],
+        filter: n => n.group === 'Games',
+        sort: n => n.id === 'Energizers - Games' ? -1 : n.title.localeCompare(),
+      },
+      {
+        id: 'workshops', icon: '🛠️', label: 'Workshops',
+        groups: ['Workshops'],
+        filter: n => n.group === 'Workshops',
+        sort: n => {
+          if (n.id === 'WorkShops') return -3;
+          if (n.id === '3-in-1 Workshops') return -2;
+          return n.title.localeCompare();
+        },
+      },
+      {
+        id: 'community', icon: '🎨', label: 'Culture & Community',
+        groups: ['Poems', 'root'],
+        filter: n => ['The Daily Rhythm','Participants','Poems Corner'].includes(n.id) || n.group === 'Poems',
+        sort: n => n.title,
+      },
+    ];
+
+    const GROUP_COLORS = {
+      root: 'var(--color-root)',
+      Days: 'var(--color-days)',
+      Games: 'var(--color-games)',
+      Workshops: 'var(--color-workshops)',
+      Poems: 'var(--color-poems)',
+    };
+    const GROUP_LABELS = {
+      root: 'Foundation', Days: 'Day Log', Games: 'Game',
+      Workshops: 'Workshop', Poems: 'Poetry',
+    };
+
+    // --- load data ---
+    let data;
+    try {
+      const resp = await fetch('graph-data.json');
+      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+      data = await resp.json();
+    } catch (err) {
+      canvas.innerHTML = `<div class="loading-msg"><p>⚠ Could not load roadmap data.</p></div>`;
+      console.error(err);
+      return;
+    }
+
+    const { nodes } = data;
+    const nodeMap = new Map(nodes.map(n => [n.id, n]));
+
+    // --- build legend ---
+    const usedGroups = [...new Set(nodes.map(n => n.group))].sort();
+    legend.innerHTML = usedGroups.map(g =>
+      `<span class="chip" style="background:${GROUP_COLORS[g] || 'var(--color-root)'}">${GROUP_LABELS[g] || g}</span>`
+    ).join('');
+
+    // --- render sections ---
+    let totalCards = 0;
+    let html = '';
+
+    for (const section of SECTIONS) {
+      let sectionNodes = nodes.filter(section.filter).sort((a, b) => {
+        const sa = typeof section.sort === 'function' ? section.sort(a) : 0;
+        const sb = typeof section.sort === 'function' ? section.sort(b) : 0;
+        return sa - sb;
+      });
+
+      if (!sectionNodes.length) continue;
+      totalCards += sectionNodes.length;
+
+      html += `<div class="canvas-section" id="sec-${section.id}">`;
+      html += `<div class="section-header">`;
+      html += `<span class="icon">${section.icon}</span>`;
+      html += `<h2>${section.label}</h2>`;
+      html += `<span class="count">${sectionNodes.length}</span>`;
+      html += `</div>`;
+
+      const gridClass = section.timeline ? 'card-grid timeline' : 'card-grid';
+      html += `<div class="${gridClass}">`;
+
+      for (const n of sectionNodes) {
+        const isHub = n.type === 'hub';
+        const hubClass = isHub ? ' hub' : '';
+        const groupClass = `group-${n.group}`;
+        const href = n.path || n.id + '.html';
+
+        // truncate long titles for display
+        let displayTitle = n.title;
+        if (displayTitle.length > 50 && !isHub) {
+          displayTitle = displayTitle.substring(0, 47) + '…';
+        }
+
+        // tags (max 3)
+        const tags = (n.tags || []).slice(0, 3);
+
+        html += `<a href="${href}" class="card ${groupClass}${hubClass}" tabindex="0"
+                     title="${escapeHtml(n.title)} — ${n.degree || 0} links">`;
+        html += `<div class="card-type">${n.type || GROUP_LABELS[n.group] || 'page'}</div>`;
+        html += `<div class="card-title">${escapeHtml(displayTitle)}</div>`;
+        if (n.degree > 0) {
+          html += `<div class="card-degree">🔗 ${n.degree} link${n.degree !== 1 ? 's' : ''}</div>`;
+        }
+        if (tags.length) {
+          html += `<div class="card-tags">${tags.map(t => `<span>#${escapeHtml(t)}</span>`).join('')}</div>`;
+        }
+        html += `</a>`;
+      }
+
+      html += `</div></div>`;
+
+      // connector between sections
+      html += `<div class="section-connector">↓</div>`;
+    }
+
+    // remove trailing connector
+    html = html.replace(/<div class="section-connector">↓<\/div>\s*$/, '');
+
+    canvas.innerHTML = html;
+
+    // --- keyboard navigation ---
+    const allCards = canvas.querySelectorAll('.card');
+    let focusIdx = -1;
+
+    document.addEventListener('keydown', (e) => {
+      if (!allCards.length) return;
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+        e.preventDefault();
+        focusIdx = Math.min(focusIdx + 1, allCards.length - 1);
+        allCards[focusIdx].focus();
+      } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+        e.preventDefault();
+        focusIdx = Math.max(focusIdx - 1, 0);
+        allCards[focusIdx].focus();
+    }
+    });
+
+    function escapeHtml(s) {
+      const d = document.createElement('div');
+      d.textContent = s;
+      return d.innerHTML;
+    }
+
+    console.log(`Roadmap ready: ${totalCards} cards in ${SECTIONS.length} sections.`);
+  })();
+  </script>
+</body>
+</html>

@@ -371,6 +371,12 @@ def main() -> None:
         shutil.copy2(graph_src, OUTPUT_DIR / "graph.html")
         print("✔  graph.html copied")
 
+    # copy roadmap.html if it exists at vault root
+    roadmap_src = VAULT_DIR / "roadmap.html"
+    if roadmap_src.exists():
+        shutil.copy2(roadmap_src, OUTPUT_DIR / "roadmap.html")
+        print("✔  roadmap.html copied")
+
     # copy pre-computed search index (may not exist in CI — that's ok)
     index_src = VAULT_DIR / "search-index.json"
     if index_src.exists():
